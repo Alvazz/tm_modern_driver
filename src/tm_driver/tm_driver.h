@@ -108,12 +108,18 @@ public:
 
   bool setRobotRun();
   bool setRobotStop();
+  bool setJointSpdModeoOFF();
+  bool setJointSpdModeON();
+
   
+
+  bool setMoveJointSpeedabs(const std::vector<double>& q, double blend=0.0);
   bool setMoveJabs(const std::vector<double>& q, double blend = 0.0);
   bool setMoveJrel(const std::vector<double>& dq, double blend = 0.0);
   bool setMoveLabs(const std::vector<double>& pose, double blend = 0.0);
   bool setMoveLrel(const std::vector<double>& dpose, double blend = 0.0);
-  
+
+
   void setServoTimeval(double timeval);
   bool setServoOpen(std::string type_name);
   bool setServoClose();

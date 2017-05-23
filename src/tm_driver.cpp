@@ -162,7 +162,41 @@ bool TmDriver::setRobotRun()
 
 bool TmDriver::setRobotStop()
 {
-    return (interface->sendCommandMsg("stop") > 0);
+    return (interface->sendCommandMsg("spdj 0 0 0 0 0 0 0") > 0);
+}
+
+bool TmDriver::setJointSpdModeON()
+{
+    return (interface->sendCommandMsg("nrtservo 0 speedj") > 0);
+}
+
+bool TmDriver::setJointSpdModeoOFF()
+{
+    return (interface->sendCommandMsg("nrtservo 0 stop") > 0);
+}
+
+bool TmDriver::setMoveJointSpeedabs(const std::vector<double>& q, double blend)
+{
+    unsigned int dof = interface->stateRT->getDOF();
+    if (q.size() != dof)
+    {
+        return false;
+    }
+    char var_str[16];
+    std::string cmd_msg = "spdj " + robot_ind_str;
+    for (unsigned int i = 0; i < dof; i++)
+    {
+        //memset(var_str, 0, 16);
+        snprintf(var_str, 16, "%.4f ", ((float)q[i]));
+        cmd_msg += var_str;
+    }
+    if (blend != 0)
+    {
+        //memset(var_str, 0, 16);
+        snprintf(var_str, 16, "%.1f ", 100.0f * (float)blend);
+        cmd_msg += var_str;
+    }
+    return setCommandMsg(cmd_msg);
 }
 
 bool TmDriver::setMoveJabs(const std::vector<double>& q, double blend)
@@ -424,7 +458,7 @@ bool TmDriver::setDigitalOutputEE(unsigned char ch, bool b)
     return setCommandMsg(cmd_msg);
 }
 
-bool TmDriver::setPayload(double mass)
+bool TmDriver::setPayload(double mass)//kg
 {
     ee_payload = mass;
     return true;

@@ -13,6 +13,6 @@ project(tm_socket_test)
 #endif()
 set(CMAKE_CXX_FLAGS "-std=c++11 -pthread")
 
-add_executable(test_move src/tm_print.cpp src/tm_robot_state_rt.cpp src/tm_communication.cpp src/tm_driver.cpp tm_modern_driver.cpp)
+add_executable(test_tm_driver src/tm_print.cpp src/tm_robot_state_rt.cpp src/tm_communication.cpp src/tm_driver.cpp tm_modern_driver.cpp)
 
-install(TARGETS test_move RUNTIME DESTINATION bin)
+install(TARGETS test_tm_driver RUNTIME DESTINATION bin)
