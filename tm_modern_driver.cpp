@@ -374,6 +374,11 @@ int main(int argc, char **argv)
             print_info("stop...");
             TmRobot.setRobotStop();
         }
+        else if (strncmp(cstr, "emstop", 6) == 0)
+        {
+            print_info("emergency stop... need input 'run' for resume...");
+            TmRobot.setRobotStopRun();
+        }
         else if (strncmp(cstr, "jointspdon", 10) == 0)
         {
             print_info("joint velocity control mode ON...");
