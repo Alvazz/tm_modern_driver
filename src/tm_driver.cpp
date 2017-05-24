@@ -160,9 +160,15 @@ bool TmDriver::setRobotRun()
     return (interface->sendCommandMsg("run") > 0);
 }
 
+
 bool TmDriver::setRobotStop()
 {
     return (interface->sendCommandMsg("spdj 0 0 0 0 0 0 0") > 0);
+}
+
+bool TmDriver::setRobotStopRun()
+{
+    return (interface->sendCommandMsg("stop") > 0);
 }
 
 bool TmDriver::setJointSpdModeON()
@@ -187,7 +193,7 @@ bool TmDriver::setMoveJointSpeedabs(const std::vector<double>& q, double blend)
     for (unsigned int i = 0; i < dof; i++)
     {
         //memset(var_str, 0, 16);
-        snprintf(var_str, 16, "%.4f ", ((float)q[i]));
+        snprintf(var_str, 16, "%.4f ", rad2deg * ((float)q[i]));
         cmd_msg += var_str;
     }
     if (blend != 0)

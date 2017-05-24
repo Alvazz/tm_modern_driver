@@ -53,6 +53,7 @@
 #include <math.h>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #ifdef USE_BOOST
   #include <boost/lexical_cast.hpp>
@@ -107,6 +108,7 @@ public:
   bool setCommandMsg(std::string& cmd_msg);
 
   bool setRobotRun();
+  bool setRobotStopRun();
   bool setRobotStop();
   bool setJointSpdModeoOFF();
   bool setJointSpdModeON();
