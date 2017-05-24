@@ -2,6 +2,10 @@
 
 #include <termios.h>
 #include <math.h>
+#include <iostream>
+
+#define DEG2RAD 0.01745329252
+#define RAD2DEG 57.29577951
 
 static struct termios oldt, newt;
 /* Initialize new terminal i/o settings */
@@ -385,6 +389,20 @@ int main(int argc, char **argv)
             double blend = 0;
             std::vector<double> vec = parse_cmd(cstr, delim, blend);
             TmRobot.setMoveJointSpeedabs(vec, blend);
+        }
+        else if (strncmp(cstr, "gotest", 6) == 0)
+        {
+            double blend = 0;
+            std::vector<double> vec1 = {0,0,1.57,-1.57,1.57,0};
+            std::vector<double> vec2 = {-19.0939*DEG2RAD, 10.5936*DEG2RAD, 78.3278*DEG2RAD, -88.8050*DEG2RAD, 109.0461*DEG2RAD, 0.0089*DEG2RAD};
+            std::vector<double> vec3 = {29.8743*DEG2RAD, -3.8841*DEG2RAD, 93.7037*DEG2RAD, -90.0317*DEG2RAD, 60.0783*DEG2RAD, -0.1222*DEG2RAD};
+            TmRobot.setMoveJabs(vec1, blend);
+            for (int i = 0; i < 10; ++i)
+            {
+                TmRobot.setMoveJabs(vec2, blend);
+                TmRobot.setMoveJabs(vec3, blend);
+            }
+
         }
         else if (strncmp(cstr, "movjabs", 7) == 0)
         {
