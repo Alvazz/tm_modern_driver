@@ -26,7 +26,10 @@
 #define DEG2RAD 0.01745329252
 #define RAD2DEG 57.29577951
 
+using namespace std;
+
 static struct termios oldt, newt;
+FILE *tm_record;
 /* Initialize new terminal i/o settings */
 void initTermios(int echo)
 {
@@ -53,6 +56,7 @@ int kbhit()
     return FD_ISSET(STDIN_FILENO, &rdfs);
 }
 
+
 void print_vectord(const std::vector<double>& vec)
 {
     for (int i = 0; i < vec.size() - 1; i++)
@@ -62,6 +66,23 @@ void print_vectord(const std::vector<double>& vec)
     printf("%.4f", vec[vec.size() - 1]);
 }
 
+void record_state(const TmDriver& TR, double& time_s, std::vector<double>& vec1, std::vector<double>& vec2, std::vector<double>& vec3)
+{
+    time_s = TR.interface->stateRT->getQAct(vec1);
+    time_s = TR.interface->stateRT->getQdAct(vec2);
+    time_s = TR.interface->stateRT->getQtAct(vec3);
+    fprintf(tm_record, " %.3f %.4f %.4f %.4f %.4f %.4f %.4f | %.4f %.4f %.4f %.4f %.4f %.4f | %.4f %.4f %.4f %.4f %.4f %.4f\n",
+                         time_s,
+                         vec1[0],vec1[1],vec1[2],vec1[3],vec1[4],vec1[5],
+                         vec2[0],vec2[1],vec2[2],vec2[3],vec2[4],vec2[5],
+                         vec3[0],vec3[1],vec3[2],vec3[3],vec3[4],vec3[5] );
+    printf("[ INFO] %.3f %.4f %.4f %.4f %.4f %.4f %.4f | %.4f %.4f %.4f %.4f %.4f %.4f | %.4f %.4f %.4f %.4f %.4f %.4f\n",
+                    time_s,
+                    vec1[0],vec1[1],vec1[2],vec1[3],vec1[4],vec1[5],
+                    vec2[0],vec2[1],vec2[2],vec2[3],vec2[4],vec2[5],
+                    vec3[0],vec3[1],vec3[2],vec3[3],vec3[4],vec3[5] );
+
+}
 void print_rt_1(const TmDriver& TR, double& time_s, std::vector<double>& vec)
 {
     time_s = TR.interface->stateRT->getQAct(vec);
@@ -284,6 +305,37 @@ int main(int argc, char **argv)
             print_info("halt");
             TmRobot.interface->halt();
             fgRun = false;
+        }
+        else if (strncmp(cstr, "writetofile", 11) == 0)
+        {
+            print_info("recording...");
+            double temp_time;
+            std::vector<double> temp_vec1, temp_vec2, temp_vec3;
+            initTermios(1);
+
+            tm_record = fopen("record_state.txt", "w");
+
+            if(tm_record)
+            {
+                while(1)
+                {
+                    if (kbhit())
+                    {
+                        c = getchar();
+                        if (c == 'q' || c == 'Q')
+                            break;
+                    }
+                    record_state(TmRobot, temp_time, temp_vec1, temp_vec2, temp_vec3);
+                    std::this_thread::sleep_for(std::chrono::milliseconds(25));
+                }
+                resetTermios();
+                printf("\n");
+            }
+            else
+            {
+                printf("[ INFO] file open fail\n");
+            }
+            fclose(tm_record);
         }
         else if (strncmp(cstr, "data", 4) == 0)
         {
