@@ -1,7 +1,8 @@
 /*********************************************************************
  * tm_modern_driver.cpp
  *
- * Copyright 2017 Copyright National Chiao Tung University, ISCI lab.
+ * Copyright (c) 2017, ISCI / National Chiao Tung University (NCTU)
+ *
  * Author: Howard Chen (s880367@gmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -465,6 +466,18 @@ int main(int argc, char **argv)
             double blend = 0;
             std::vector<double> vec = parse_cmd(cstr, delim, blend);
             TmRobot.setMoveJointSpeedabs(vec, blend);
+        }
+        else if(strncmp(cstr, "glopen", 6) == 0)
+        {
+            unsigned char ch = 3;
+
+            TmRobot.setDigitalOutputEE(ch,true);
+        }
+        else if(strncmp(cstr, "glclose", 7) == 0)
+        {
+            unsigned char ch = 3;
+
+            TmRobot.setDigitalOutputEE(ch,false);
         }
         else if (strncmp(cstr, "gotest", 6) == 0)
         {
