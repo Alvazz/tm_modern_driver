@@ -467,17 +467,17 @@ int main(int argc, char **argv)
             std::vector<double> vec = parse_cmd(cstr, delim, blend);
             TmRobot.setMoveJointSpeedabs(vec, blend);
         }
-        else if(strncmp(cstr, "glopen", 6) == 0)
+        else if(strncmp(cstr, "gopen", 6) == 0)
         {
-            unsigned char ch = 3;
-
-            TmRobot.setDigitalOutputEE(ch,true);
-        }
-        else if(strncmp(cstr, "glclose", 7) == 0)
-        {
-            unsigned char ch = 3;
+            unsigned char ch = 0;
 
             TmRobot.setDigitalOutputEE(ch,false);
+        }
+        else if(strncmp(cstr, "gclose", 7) == 0)
+        {
+            unsigned char ch = 0;
+
+            TmRobot.setDigitalOutputEE(ch,true);
         }
         else if (strncmp(cstr, "gotest", 6) == 0)
         {
@@ -492,6 +492,24 @@ int main(int argc, char **argv)
                 TmRobot.setMoveJabs(vec3, blend);
             }
 
+        }
+        else if (strncmp(cstr, "ready", 5) == 0)
+        {
+            double blend = 0;
+            std::vector<double> vec = {0,0,1.57,-1.57,1.57,0};
+            TmRobot.setMoveJabs(vec, blend);
+        }
+        else if (strncmp(cstr, "home", 4) == 0)
+        {
+            double blend = 0;
+            std::vector<double> vec = {0,0,0,0,0,0};
+            TmRobot.setMoveJabs(vec, blend);
+        }
+        else if (strncmp(cstr, "binpicking",10 ) == 0)
+        {
+            double blend = 0;
+            std::vector<double> vec = {0.0615, -0.6537, 2.0253, 0.2087, 1.5775, 0.0556};
+            TmRobot.setMoveJabs(vec, blend);
         }
         else if (strncmp(cstr, "movjabs", 7) == 0)
         {
